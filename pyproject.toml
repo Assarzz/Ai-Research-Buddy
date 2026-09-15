@@ -6,8 +6,8 @@ readme = "README.md"
 authors = [
     { name = "Assar", email = "assarlannerbornzz@gmail.com" }
 ]
-requires-python = ">=3.13"
-dependencies = []
+requires-python = ">=3.11"
+dependencies = ["flask"]
 
 [project.scripts]
 ai-research-buddy = "ai_research_buddy:main"
