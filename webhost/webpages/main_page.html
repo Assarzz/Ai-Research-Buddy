@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>AI Reasearch buddy</title>
+</head>
+<body>
+
+	<h1 class="title">AI research buddy</h1>
+	<h1 class="title">Hello: {{ session['user'] }}</h1>
+
+	<div class="center">
+		<div class="move-good">
+				
+			<select id="grading_type">
+				<option value="core_eval_standard">Core eval standard</option>
+				<option value="just_wing_it">Normal AI review</option>
+			</select>
+			<br>
+			<textarea id="paper" placeholder="insert paper here"></textarea>
+			<br>
+			<button id="send">FEEDBACK</button>
+			<div id="resp"></div>
+		</div>
+	</div>
+
+
+	<script>
+		document.getElementById("send").addEventListener("click", async ()=>{
+			const text = document.getElementById("paper").value;
+			const mode = document.getElementById("grading_type").value;
+			const resp = await fetch("/grade_paper", {
+				method: "POST",
+				headers: {
+					"Content-Type": "text/plain",
+					"Review-mode": mode,
+				},
+				body: text
+			});
+			
+			const result = await resp.text();
+			document.getElementById("resp").textContent = result;
+
+		});
+	</script>
+	
+	<style>
+		body {
+			background-color: #243119;
+			color: #C9F2C7;
+			padding: 8vw;
+		}		
+
+		.title {
+			text-align: center;
+		}
+		.center {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			border: 3px solid #629460;
+			border-radius: 3px;
+
+			background-color: #96BE8C;
+			color: #243119;
+
+		}
+
+		.wrong {
+			color: red;
+		}
+
+		.move-good {
+			text-align: center;
+			padding: 2vw
+
+		}
+	</style>
+</body>
+</html>
+
