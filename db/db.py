@@ -7,13 +7,6 @@ def init_database():
     # Create a cursor
     c = conn.cursor()
 
-    # Datatypes:
-    # NULL 
-    # INTEGER
-    # REAL (decimal)
-    # TEXT
-    # BLOB (images, mp3 etc.)
-
     # Creates a table first time the code is run
     c.exectue("""
     CREATE TABLE IF NOT EXISTS users (
