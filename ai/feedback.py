@@ -1,15 +1,17 @@
 
 
-from sections import Section, locate_sections
+from .sections import Section, locate_sections
+
+MODEL = "llama3.2:latest"
 
 # The sections we ask the llm to find.
 SECTION_NAMES = ["Title", "Authors", "Abstract", "Keywords", "Significance Statement", "Introduction", 
                  "Materials and Methods", "Results", "Discussion", "Conclusions", "Acknowledgement", "References"]
 
 class Paper:
-    def __init__(self, raw_text: str):
+    def __init__(self, raw_text: str, model: str = MODEL):
         self.raw_text = raw_text
-        self.sections = locate_sections(raw_text, SECTION_NAMES, "llama3.1:8b")
+        self.sections = locate_sections(raw_text, SECTION_NAMES, MODEL)
 
         self.title = self.sections["Title"]
         self.abstract = self.sections["Abstract"]
@@ -76,7 +78,7 @@ Example:
 """
 
 
-def expensive_feedback(paper: Paper) -> dict[Section, list[str]]:
+def expensive_feedback(paper: Paper, model: str = MODEL) -> dict[Section, list[str]]:
     """Feedback that requires a call to the LLM, it takes like 10-20 seconds so it has to be run in the background and only occasionally"""
     
     feedback = {
@@ -99,7 +101,7 @@ def expensive_feedback(paper: Paper) -> dict[Section, list[str]]:
         response = ollama.chat(
             # llama3.1:8b
             # qwen3:4b
-            model='llama3.1:8b',
+            model=model,
             messages=[
                 {'role': 'system', 'content': system_instructions},
                 {'role': 'user', 'content': content_to_review}

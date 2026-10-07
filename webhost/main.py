@@ -1,5 +1,8 @@
 from flask import Flask, request, render_template_string, redirect, url_for, session, Response
 import db.verify
+from ai.feedback import expensive_feedback, Paper
+
+MODEL = "llama3.2:latest"
 
 app = Flask(__name__)
 app.config.update(
@@ -54,6 +57,25 @@ def grade_paper():
     mode = request.headers.get("Review-mode")
     print(text)
     print(mode)
+
+    paper = Paper(text)
+    print("Sections found by llm")
+    for name, section in paper.sections.items():
+        if section.is_found:
+            print(f"[{name}] (characters {section.span[0]}-{section.span[1]}):\n{section.text}\n")
+        else:
+            print(f"[{name}]: not found\n")
+
+    feedback = expensive_feedback(paper, model=MODEL)
+    print("got feedback")
+
+    out = ""
+    
+    for section, feedback_list in feedback.items():
+        for f in feedback_list:
+            print(f"[{section.name}]: {f}")
+            out += f"[{section.name}]: {f}"
+    return out
     if (mode == "core_eval_standard"):
         return f"""Text is results: \r\n
                     Integrity and Reproducability: 10/10\n
