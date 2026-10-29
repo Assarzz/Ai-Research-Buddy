@@ -1,6 +1,6 @@
-from flask import Flask, request, render_template_string, redirect, url_for, session, Response
+from flask import Flask, request, render_template_string, redirect, url_for, session, Response, jsonify
 import db.verify
-#from ai.feedback import expensive_feedback, Paper
+from ai.feedback import expensive_feedback, Paper
 
 MODEL = "llama3.2:latest"
 
@@ -9,7 +9,7 @@ app.config.update(
     SECRET_KEY="TEMP_CHANGE_TO_REAL_SECRET_KEY___uyfdggihdisdfbsDSAFUEPFJPS", # change to .env file
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SECURE=True,
-    SESSION_COOKIE_SAMESITE="Strict",
+    SESSION_COOKIE_SAMESITE="Lax",
 )
 
 # refresh session cookie on all requests
@@ -91,3 +91,34 @@ def grade_paper():
                 """
     result = f"That paper lit: {text}"
     return Response(result, content_type="text/plain")
+
+@app.route("/api/hello")
+def hello():
+    print("api/hello")
+    if (session.get("user") == None):
+        print("none")
+        return "" 
+    print(session.get('user'))
+    return jsonify({"user": session.get('user')})
+
+@app.route("/api/login", methods=["POST"])
+def tmp():
+    data = request.get_json(silent=True) or {}
+
+    username = data.get("username", "")
+    password = data.get("password", "")
+
+    user = None
+    if db.verify.verifyAccount(username, password):
+        user = username
+
+    if user:
+        session["user"] = username
+        return jsonify({"success": True})
+
+    return jsonify({"success": False}), 401
+
+@app.route("/api/grade_paper", methods=["POST"])
+def ermm():
+    print("test")
+    return grade_paper()
