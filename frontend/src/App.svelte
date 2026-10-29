@@ -1,8 +1,12 @@
 <script>
-	let { user } = $props()
+	let user = $state('')
 	let mode = $state('core_eval_standard')
 	let text = $state('')
 	let result = $state('')
+
+	fetch("/api/get_user")
+		.then(r => r.json())
+		.then(data => user = data.user);
 
 	async function send() {
 		const resp = await fetch("/grade_paper", {

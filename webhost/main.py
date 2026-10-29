@@ -29,7 +29,13 @@ def get_html_file(name):
 def main_page():
     if (session.get("user") == None):
         return redirect(url_for("login"))
-    return render_template_string(get_html_file("build/index.html"))
+    return get_html_file("build/index.html")
+
+@app.route("/api/get_user")
+def get_user():
+    if (session.get("user") == None):
+        return {"error": "not logged in"}, 401
+    return {"user": session["user"]}
 
 def login_attempt(username, password):
     if db.verify.verifyAccount(username, password):
