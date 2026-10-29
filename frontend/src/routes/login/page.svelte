@@ -66,12 +66,6 @@
 </div>
 
 <style>
-    :global(body) {
-        background-color: #243119;
-        color: #C9F2C7;
-        padding: 8vw;
-    }
-
     .title {
         text-align: center;
     }
@@ -80,9 +74,9 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        border: 3px solid #629460;
+        border: 3px solid var(--border);
         border-radius: 3px;
-        background-color: #96BE8C;
+        background-color: var(--bg-inner);
         color: #243119;
     }
 
