@@ -1,10 +1,10 @@
 from flask import Flask, request, render_template_string, redirect, url_for, session, Response
 import db.verify
-from ai.feedback import expensive_feedback, Paper
+#from ai.feedback import expensive_feedback, Paper
 
 MODEL = "llama3.2:latest"
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="webpages/build/assets", static_url_path="/assets")
 app.config.update(
     SECRET_KEY="TEMP_CHANGE_TO_REAL_SECRET_KEY___uyfdggihdisdfbsDSAFUEPFJPS", # change to .env file
     SESSION_COOKIE_HTTPONLY=True,
@@ -29,7 +29,7 @@ def get_html_file(name):
 def main_page():
     if (session.get("user") == None):
         return redirect(url_for("login"))
-    return render_template_string(get_html_file("main_page.html"))
+    return render_template_string(get_html_file("build/index.html"))
 
 def login_attempt(username, password):
     if db.verify.verifyAccount(username, password):
@@ -66,15 +66,15 @@ def grade_paper():
         else:
             print(f"[{name}]: not found\n")
 
-    feedback = expensive_feedback(paper, model=MODEL)
+    #feedback = expensive_feedback(paper, model=MODEL)
     print("got feedback")
 
     out = ""
     
-    for section, feedback_list in feedback.items():
-        for f in feedback_list:
-            print(f"[{section.name}]: {f}")
-            out += f"[{section.name}]: {f}"
+    # for section, feedback_list in feedback.items():
+    #     for f in feedback_list:
+    #         print(f"[{section.name}]: {f}")
+    #         out += f"[{section.name}]: {f}"
     return out
     if (mode == "core_eval_standard"):
         return f"""Text is results: \r\n
