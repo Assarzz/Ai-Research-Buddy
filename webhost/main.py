@@ -6,7 +6,7 @@ MODEL = "llama3.2:latest"
 
 app = Flask(__name__, static_folder="webpages/build/assets", static_url_path="/assets")
 app.config.update(
-    SECRET_KEY="TEMP_CHANGE_TO_REAL_SECRET_KEY___uyfdggihdisdfbsDSAFUEPFJPS", # change to .env file
+    SECRET_KEY="TEMP_CHANGE_TO_REAL_SECRET_KEY___uyfdggihdisdfbsDSAFUEPF", # change to .env file
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SECURE=True,
     SESSION_COOKIE_SAMESITE="Lax",
@@ -97,7 +97,7 @@ def hello():
     print("api/hello")
     if (session.get("user") == None):
         print("none")
-        return "" 
+        return jsonify({"user": ""})    
     print(session.get('user'))
     return jsonify({"user": session.get('user')})
 
