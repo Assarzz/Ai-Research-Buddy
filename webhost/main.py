@@ -1,15 +1,15 @@
-from flask import Flask, request, render_template_string, redirect, url_for, session, Response
+from flask import Flask, request, render_template_string, redirect, url_for, session, Response, jsonify
 import db.verify
 from ai.feedback import expensive_feedback, Paper
 
 MODEL = "llama3.2:latest"
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="webpages/build/assets", static_url_path="/assets")
 app.config.update(
-    SECRET_KEY="TEMP_CHANGE_TO_REAL_SECRET_KEY___uyfdggihdisdfbsDSAFUEPFJPS", # change to .env file
+    SECRET_KEY="TEMP_CHANGE_TO_REAL_SECRET_KEY___uyfdggihdisdfbsDSAFUEPF", # change to .env file
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SECURE=True,
-    SESSION_COOKIE_SAMESITE="Strict",
+    SESSION_COOKIE_SAMESITE="Lax",
 )
 
 # refresh session cookie on all requests
@@ -29,7 +29,13 @@ def get_html_file(name):
 def main_page():
     if (session.get("user") == None):
         return redirect(url_for("login"))
-    return render_template_string(get_html_file("main_page.html"))
+    return get_html_file("build/index.html")
+
+@app.route("/api/get_user")
+def get_user():
+    if (session.get("user") == None):
+        return {"error": "not logged in"}, 401
+    return {"user": session["user"]}
 
 def login_attempt(username, password):
     if db.verify.verifyAccount(username, password):
@@ -66,15 +72,15 @@ def grade_paper():
         else:
             print(f"[{name}]: not found\n")
 
-    feedback = expensive_feedback(paper, model=MODEL)
+    #feedback = expensive_feedback(paper, model=MODEL)
     print("got feedback")
 
     out = ""
     
-    for section, feedback_list in feedback.items():
-        for f in feedback_list:
-            print(f"[{section.name}]: {f}")
-            out += f"[{section.name}]: {f}"
+    # for section, feedback_list in feedback.items():
+    #     for f in feedback_list:
+    #         print(f"[{section.name}]: {f}")
+    #         out += f"[{section.name}]: {f}"
     return out
     if (mode == "core_eval_standard"):
         return f"""Text is results: \r\n
@@ -85,3 +91,34 @@ def grade_paper():
                 """
     result = f"That paper lit: {text}"
     return Response(result, content_type="text/plain")
+
+@app.route("/api/hello")
+def hello():
+    print("api/hello")
+    if (session.get("user") == None):
+        print("none")
+        return jsonify({"user": ""})    
+    print(session.get('user'))
+    return jsonify({"user": session.get('user')})
+
+@app.route("/api/login", methods=["POST"])
+def tmp():
+    data = request.get_json(silent=True) or {}
+
+    username = data.get("username", "")
+    password = data.get("password", "")
+
+    user = None
+    if db.verify.verifyAccount(username, password):
+        user = username
+
+    if user:
+        session["user"] = username
+        return jsonify({"success": True})
+
+    return jsonify({"success": False}), 401
+
+@app.route("/api/grade_paper", methods=["POST"])
+def ermm():
+    print("test")
+    return grade_paper()

@@ -1,0 +1,19 @@
+/* This file is imported in `main.js` and available in all .svelte files. We can define our color theme here  */
+:root {
+	--bg:          #243119; 
+  --bg-inner: #567e4b;
+	--text:        #C9F2C7;  /* text on the background */
+	--border:      #629460;
+	--error:       red;
+}
+
+html, body, #app {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	box-sizing: border-box;
+	background-color: var(--bg);
+	color: var(--text);
+}
