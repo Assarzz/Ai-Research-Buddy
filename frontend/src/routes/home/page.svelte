@@ -8,7 +8,7 @@
 
 	onMount(async () => {
 		try {
-			const response = await fetch("/api/hello");
+			const response = await fetch("/api/get_user");
 			console.log(response);
 
 			const data = await response.json();

@@ -12,7 +12,6 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': 'http://127.0.0.1:5000',
-      '/grade_paper': 'http://127.0.0.1:5000',
     },
   },
 })
