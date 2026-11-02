@@ -15,8 +15,8 @@ To run the project, you need to run the svelte frontend on any port, and then ru
 
 ## To run the svelte frontend:
 1. Cd into /frontend
-2. run `npm run dev` or `npm run build`, depending on if itn is for development (`dev`) or for deployment (`build`).
+2. run `npm run dev` or `npm run build`, depending on if it is for development (`dev`) or for deployment (`build`).
 
 ## To run the flask api
 1. Cd into the root directory
-2. run `python -m flask --app webhost.main run --port PORT`, but replace PORT with the desired port to run the api on (with default frontend configs requires port 5000).
+2. run `python -m flask --app api.main run --port PORT`, but replace PORT with the desired port to run the api on (with default frontend configs requires port 5000).
