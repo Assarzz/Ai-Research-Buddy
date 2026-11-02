@@ -29,14 +29,13 @@ SCHEMA = {
 }
 
 
-def render_pages(pdf_path: str, max_side: int = 1024) -> list[tuple[bytes, int, int]]:
+def render_pages(doc: pymupdf.Document, max_side: int = 1024) -> list[tuple[bytes, int, int]]:
     """Render every page to PNG with its longest side at most max_side pixels. Returns (png, width, height)."""
     pages = []
-    with pymupdf.open(pdf_path) as doc:
-        for page in doc:
-            zoom = min(max_side / max(page.rect.width, page.rect.height), 200 / 72)  # cap at 200 dpi
-            pix = page.get_pixmap(matrix=pymupdf.Matrix(zoom, zoom))
-            pages.append((pix.tobytes("png"), pix.width, pix.height))
+    for page in doc:
+        zoom = min(max_side / max(page.rect.width, page.rect.height), 200 / 72)  # cap at 200 dpi
+        pix = page.get_pixmap(matrix=pymupdf.Matrix(zoom, zoom))
+        pages.append((pix.tobytes("png"), pix.width, pix.height))
     return pages
 
 
@@ -51,7 +50,7 @@ def context_size(pages: list[tuple[bytes, int, int]]) -> int:
 
 
 def evaluate(
-    pdf_path: str,
+    pdf: str | pymupdf.Document,
     criteria: list[str],
     model: str = DEFAULT_MODEL,
     max_side: int = 1024,
@@ -64,7 +63,11 @@ def evaluate(
     Raises ollama.ResponseError (e.g. model not pulled) or ConnectionError (Ollama not running).
     """
 
-    pages = render_pages(pdf_path, max_side)
+    if isinstance(pdf, str):
+        doc = pymupdf.open(pdf)
+    else:
+        doc = pdf
+    pages = render_pages(doc, max_side)
     client = ollama.Client(host=host)
     paper = [
         {"role": "system", "content": SYSTEM_PROMPT},

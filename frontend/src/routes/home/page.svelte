@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 	import PdfViewer from "./PdfViewer.svelte";
-
+	import Criteria from "./Criteria.svelte";
 	let selectedPdf = $state<File | undefined>();
 
 	let { user } = $props();
@@ -23,21 +23,8 @@
 	});
 
 	let mode = $state("core_eval_standard");
-	let text = $state("");
-	let result = $state("");
 
-	async function send() {
-		const resp = await fetch("/api/grade_paper", {
-			method: "POST",
-			headers: {
-				"Content-Type": "text/plain",
-				"Review-mode": mode,
-			},
-			body: text,
-		});
 
-		result = await resp.text();
-	}
 </script>
 
 <div class="outer">
@@ -47,7 +34,8 @@
 	<div class="right">
 		<h1 class="title">AI research buddy</h1>
 		<h1 class="title">Hello: {user}</h1>
-
+		
+		<Criteria bind:selectedPdf></Criteria>
 		<div class="center">
 			<div class="move-good">
 				<select id="grading_type" bind:value={mode}>
@@ -56,8 +44,7 @@
 					>
 					<option value="just_wing_it">Normal AI review</option>
 				</select>
-				<button id="send" onclick={send}>FEEDBACK</button>
-				<div id="resp">{result}</div>
+				
 			</div>
 		</div>
 	</div>

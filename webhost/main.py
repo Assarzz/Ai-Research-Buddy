@@ -1,8 +1,8 @@
-from flask import Flask, request, render_template_string, redirect, url_for, session, Response, jsonify
+from flask import Flask, request, render_template_string, redirect, url_for, session, Response, jsonify, stream_with_context
 import db.verify
-from ai.feedback import expensive_feedback, Paper
-
-MODEL = "llama3.2:latest"
+from ai.pdf_evaluate import evaluate
+import json
+import pymupdf
 
 app = Flask(__name__, static_folder="webpages/build/assets", static_url_path="/assets")
 app.config.update(
@@ -56,41 +56,35 @@ def login():
         return login_attempt(t1, t2) 
     return render_template_string(get_html_file("login.html"))
 
+@app.route("/check_pdf_availability", methods=["GET"])
+def check_pdf_availability():
+    """If the server already have access to the pdf there is no need to send it over. We check the hashes"""
+    hash = request.form["pdf_hash"]
+    # look up hash in database if it is there return 1
+
+    # for now just return -1
+    return -1
+
 
 @app.route("/grade_paper", methods=["POST"])
 def grade_paper():
-    text = request.get_data(as_text=True)
-    mode = request.headers.get("Review-mode")
-    print(text)
-    print(mode)
+    if session.get("user") is None:
+        return {"error": "not logged in"}
 
-    paper = Paper(text)
-    print("Sections found by llm")
-    for name, section in paper.sections.items():
-        if section.is_found:
-            print(f"[{name}] (characters {section.span[0]}-{section.span[1]}):\n{section.text}\n")
-        else:
-            print(f"[{name}]: not found\n")
+    file = request.files.get("pdfFile")
+    if file is None:
+        return {"error": "no pdf uploaded"}
 
-    #feedback = expensive_feedback(paper, model=MODEL)
-    print("got feedback")
+    pdf_bytes = file.read()
+    criteria = request.form.getlist("criteria")
 
-    out = ""
+    @stream_with_context
+    def generate():
+        with pymupdf.open(stream=pdf_bytes, filetype="pdf") as doc:
+            for result in evaluate(doc, criteria):
+                yield json.dumps(result) + "\n"
+    return Response(generate(), mimetype="application/x-ndjson")
     
-    # for section, feedback_list in feedback.items():
-    #     for f in feedback_list:
-    #         print(f"[{section.name}]: {f}")
-    #         out += f"[{section.name}]: {f}"
-    return out
-    if (mode == "core_eval_standard"):
-        return f"""Text is results: \r\n
-                    Integrity and Reproducability: 10/10\n
-                    Novelty and Signifiance: 10/10\n
-                    Peer Review and Transparancy: 10/10\n
-                    Output and Impact Metrics: 10/10\n
-                """
-    result = f"That paper lit: {text}"
-    return Response(result, content_type="text/plain")
 
 @app.route("/api/hello")
 def hello():
