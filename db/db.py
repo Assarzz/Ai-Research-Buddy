@@ -18,12 +18,22 @@ def init_database():
     """)
 
     c.exectue("""
+            CREATE TABLE IF NOT EXISTS chats (
+                chat_id TEXT PRIMARY KEY,
+                title TEXT,
+                sent DATETIME,
+                last_upd DATETIME
+                );
+            """)
+
+    c.exectue("""
         CREATE TABLE IF NOT EXISTS chat_logs (
-            chat_id INTEGER PRIMARY KEY,
+            id INTEGER PRIMARY KEY,
+            chat_id TEXT NOT NULL,
             user TEXT NOT NULL,
-            date DATE,
-            time TIME,
-            message TEXT NOT NULL
+            sent DATETIME,
+            message TEXT NOT NULL,
+            FOREIGN KEY (chat_id) REFERENCES chats(chat_id)
             );
         """)
 
