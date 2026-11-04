@@ -18,6 +18,7 @@ def init_database():
         );
     """)
 
+    # Create a chat_id with chat_id = str(uuid.uuid4())
     c.exectue("""
     CREATE TABLE IF NOT EXISTS chats (
         chat_id TEXT PRIMARY KEY,
@@ -49,25 +50,24 @@ def add_user(user_name: str, email: str, password: str):
     conn = sqlite3.connect("database.db")
     c = conn.cursor()
 
-    c.execute(f"""
-        INSERT INTO users (user_name, email)
-        VALUES ({user_name}, {email}, {password});
-        """)
+    c.execute("""
+        INSERT INTO users (user_name, email, password)
+        VALUES (?, ?, ?)
+        """, (user_name, email, password)
+        )
     
     conn.commit()
     conn.close()
 
-def create_chat_id():
-    chat_id = str(uuid.uuid4())
-
-def save_msg(db, chat_id, message):
+def save_msg(conn, chat_id, message):
     conn = sqlite3.connect("database.db")
     c = conn.cursor()
 
     c.execute("""
     INSERT INTO chat_logs (chat_id, message) 
     VALUES (?,?)
-    """)
+    """, (chat_id, message)
+    )
 
     conn.commit()
     conn.close()
