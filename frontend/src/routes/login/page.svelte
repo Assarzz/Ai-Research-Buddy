@@ -59,7 +59,7 @@
 
         <br />
 
-        <a href="/signup">
+        <a href="/#/signup">
             <button type="button">CREATE ACCOUNT</button>
         </a>
 

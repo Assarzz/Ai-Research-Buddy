@@ -65,6 +65,20 @@ def api_login():
 
     return jsonify({"success": False}), 401
 
+@app.route("/api/signup", methods=["POST"])
+def api_signup():
+    data = request.get_json(silent=True) or {}
+
+    #Account details for creating account
+    username = data.get("username", "")
+    password = data.get("password", "")
+
+    print(username, password)
+    print("Testing Testing")
+
+    return jsonify({
+        "success": True
+    })
 
 @app.route("/api/grade_paper", methods=["POST"])
 def api_grade_paper():
