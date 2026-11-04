@@ -59,7 +59,7 @@ def add_user(user_name: str, email: str, password: str):
     conn.commit()
     conn.close()
 
-def save_msg(conn, chat_id, message):
+def save_msg(chat_id, message):
     conn = sqlite3.connect("database.db")
     c = conn.cursor()
 
