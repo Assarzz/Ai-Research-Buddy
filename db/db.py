@@ -1,4 +1,5 @@
 import sqlite3
+import uuid
 
 def init_database():
     # Creates a connection to the db, will create a db if it does not already exist
@@ -18,24 +19,24 @@ def init_database():
     """)
 
     c.exectue("""
-            CREATE TABLE IF NOT EXISTS chats (
-                chat_id TEXT PRIMARY KEY,
-                title TEXT,
-                sent DATETIME,
-                last_upd DATETIME
-                );
-            """)
+    CREATE TABLE IF NOT EXISTS chats (
+        chat_id TEXT PRIMARY KEY,
+        title TEXT,
+        sent DATETIME,
+        last_upd DATETIME
+        );
+    """)
 
     c.exectue("""
-        CREATE TABLE IF NOT EXISTS chat_logs (
-            id INTEGER PRIMARY KEY,
-            chat_id TEXT NOT NULL,
-            user TEXT NOT NULL,
-            sent DATETIME,
-            message TEXT NOT NULL,
-            FOREIGN KEY (chat_id) REFERENCES chats(chat_id)
-            );
-        """)
+    CREATE TABLE IF NOT EXISTS chat_logs (
+        id INTEGER PRIMARY KEY,
+        chat_id TEXT NOT NULL,
+        user TEXT NOT NULL,
+        sent DATETIME,
+        message TEXT NOT NULL,
+        FOREIGN KEY (chat_id) REFERENCES chats(chat_id)
+        );
+    """)
 
     # Commit commands {.execute()} to db 
     conn.commit()
@@ -55,3 +56,19 @@ def add_user(user_name: str, email: str, password: str):
     
     conn.commit()
     conn.close()
+
+def create_chat_id():
+    chat_id = str(uuid.uuid4())
+
+def save_msg(db, chat_id, message):
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+
+    c.execute("""
+    INSERT INTO chat_logs (chat_id, message) 
+    VALUES (?,?)
+    """)
+
+    conn.commit()
+    conn.close()
+
