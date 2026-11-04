@@ -3,7 +3,7 @@
 
   import Home from './routes/home/page.svelte';
   import Login from './routes/login/page.svelte';
-  import Signup from './routes/signin/page.svelte'
+  import Signup from './routes/signup/page.svelte'
 
   const routes = {
     '/': Home,
