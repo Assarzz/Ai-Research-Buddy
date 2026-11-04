@@ -23,7 +23,7 @@ def init_database():
     CREATE TABLE IF NOT EXISTS chats (
         chat_id TEXT PRIMARY KEY,
         title TEXT,
-        sent DATETIME,
+        sent TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         last_upd DATETIME
         );
     """)
@@ -33,7 +33,7 @@ def init_database():
         id INTEGER PRIMARY KEY,
         chat_id TEXT NOT NULL,
         user TEXT NOT NULL,
-        sent DATETIME,
+        sent TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         message TEXT NOT NULL,
         FOREIGN KEY (chat_id) REFERENCES chats(chat_id)
         );
