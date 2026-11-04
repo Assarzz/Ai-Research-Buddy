@@ -59,7 +59,7 @@
 
         <br />
 
-        <a href="/login">
+        <a href="/#/login">
             <button type="button">LOG IN</button>
         </a>
 
