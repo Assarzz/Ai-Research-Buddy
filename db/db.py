@@ -17,13 +17,23 @@ def init_database():
         );
     """)
 
+    c.exectue("""
+        CREATE TABLE IF NOT EXISTS chat_logs (
+            chat_id INTEGER PRIMARY KEY,
+            user TEXT NOT NULL,
+            date DATE,
+            time TIME,
+            message TEXT NOT NULL
+            );
+        """)
+
     # Commit commands {.execute()} to db 
     conn.commit()
 
     # Close connection
     conn.close()
 
-# Another function is needed to encrypt the password
+# Another function is needed to hash the password
 def add_user(user_name: str, email: str, password: str):
     conn = sqlite3.connect("database.db")
     c = conn.cursor()
