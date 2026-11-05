@@ -11,7 +11,7 @@ def verifyAccount(name,  password):
     c = conn.cursor()
 
     c.execute("""
-    SELECT password FROM users WHERE username=?
+    SELECT password FROM users WHERE user_name=?
     """, (name)
     )
 

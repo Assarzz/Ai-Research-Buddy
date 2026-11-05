@@ -18,6 +18,8 @@
 
         const data = await response.json();
 
+		console.log(data.success)
+
         if (response.ok && data.success) {
             window.location.href = `/`;
         } else {
@@ -64,7 +66,7 @@
         </a>
 
         {#if result === 'failed'}
-            <h2 class="wrong">INCORRECT LOGIN!</h2>
+            <h2 class="wrong">Account already exists</h2>
         {/if}
     </div>
 </div>

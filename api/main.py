@@ -9,7 +9,7 @@ app = Flask(__name__, static_folder="webpages/build/assets",
             static_url_path="/assets")
 app.config.update(
     # change to .env file
-    SECRET_KEY="TEMP_CHANGE_TO_REAL_SECRET_KEY___uyfdggihdisdfbsDSAFUEPFA",
+    SECRET_KEY="TEMP_CHANGE_TO_REAL_SECRET_KEY___uyfdggihdisdfbsDSAFUEPFAA",
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SECURE=True,
     SESSION_COOKIE_SAMESITE="Lax",
@@ -66,23 +66,29 @@ def api_login():
 
     return jsonify({"success": False}), 401
 
+
 @app.route("/api/signup", methods=["POST"])
 def api_signup():
     data = request.get_json(silent=True) or {}
 
-    #Account details for creating account
+    # Account details for creating account
     username = data.get("username", "")
     password = data.get("password", "")
-    email = "test@gmail.com"
-
-    add_user(username, email, password)
 
     print(username, password)
     print("Testing Testing")
 
+    session['user'] = username
+
+    if db.db.add_user(username, username, password):
+        return jsonify({
+            "success": True
+        })
+
     return jsonify({
-        "success": True
+        "success": False
     })
+
 
 @app.route("/api/grade_paper", methods=["POST"])
 def api_grade_paper():
