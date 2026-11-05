@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template_string, redirect, url_for, session, Response, jsonify, stream_with_context
 import db.verify
-import db.db
+import db.database
 from ai.pdf_evaluate import evaluate
 import json
 import pymupdf
@@ -73,6 +73,9 @@ def api_signup():
     #Account details for creating account
     username = data.get("username", "")
     password = data.get("password", "")
+    email = "test@gmail.com"
+
+    add_user(username, email, password)
 
     print(username, password)
     print("Testing Testing")
