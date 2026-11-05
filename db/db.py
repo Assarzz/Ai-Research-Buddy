@@ -9,7 +9,7 @@ def init_database():
     c = conn.cursor()
 
     # Creates a table first time the code is run
-    c.exectue("""
+    c.execute("""
     CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_name TEXT NOT NULL,
@@ -19,7 +19,7 @@ def init_database():
     """)
 
     # Create a chat_id with chat_id = str(uuid.uuid4())
-    c.exectue("""
+    c.execute("""
     CREATE TABLE IF NOT EXISTS chats (
         chat_id TEXT PRIMARY KEY,
         title TEXT,
@@ -28,7 +28,7 @@ def init_database():
         );
     """)
 
-    c.exectue("""
+    c.execute("""
     CREATE TABLE IF NOT EXISTS chat_logs (
         id INTEGER PRIMARY KEY,
         chat_id TEXT NOT NULL,
