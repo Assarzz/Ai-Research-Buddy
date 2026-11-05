@@ -12,7 +12,7 @@ def verifyAccount(name,  password):
 
     c.execute("""
     SELECT password FROM users WHERE user_name=?
-    """, (name)
+    """, (name,)
     )
 
     result = c.fetchone()
