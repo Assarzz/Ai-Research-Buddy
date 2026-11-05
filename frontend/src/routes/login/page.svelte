@@ -59,6 +59,10 @@
 
         <br />
 
+        <a href="/#/signup">
+            <button type="button">CREATE ACCOUNT</button>
+        </a>
+
         {#if result === 'failed'}
             <h2 class="wrong">INCORRECT LOGIN!</h2>
         {/if}
