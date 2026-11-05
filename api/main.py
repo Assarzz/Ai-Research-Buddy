@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template_string, redirect, url_for, session, Response, jsonify, stream_with_context
 import db.verify
-import db.database
+import db.db
 from ai.pdf_evaluate import evaluate
 import json
 import pymupdf
