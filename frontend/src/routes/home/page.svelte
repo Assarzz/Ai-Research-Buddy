@@ -36,17 +36,7 @@
 		<h1 class="title">Hello: {user}</h1>
 		
 		<Criteria bind:selectedPdf></Criteria>
-		<div class="center">
-			<div class="move-good">
-				<select id="grading_type" bind:value={mode}>
-					<option value="core_eval_standard"
-						>Core eval standard</option
-					>
-					<option value="just_wing_it">Normal AI review</option>
-				</select>
-				
-			</div>
-		</div>
+
 	</div>
 </div>
 

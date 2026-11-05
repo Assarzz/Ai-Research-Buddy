@@ -1,11 +1,14 @@
 <script lang="ts">
 
+	import Status from './Status.svelte'
     let { selectedPdf = $bindable() } = $props();
 
+	type Status = 'old' | 'unloaded' | 'loading' | 'loaded'; 
 	type Criterion = {
 		id: number;
 		text: string;
-		status: 'old' | 'unloaded' | 'loading' | 'loaded';
+		status: Status;
+		last_updated: string | undefined;
 		verdict: string;
 		explanation: string;
 	};
@@ -14,7 +17,7 @@
 	function newCriterion(text: string): Criterion {
 		const id = nextId;
 		nextId += 1
-		return {id, text, status: "unloaded", verdict: "...", explanation: "..."}
+		return {id, text, status: "unloaded", verdict: "...", explanation: "...", last_updated:undefined}
 	}
 	function getCriterion(id: number): Criterion{
 		for (const c of criteria){
@@ -59,6 +62,7 @@
 				c.verdict = res.verdict;
 				c.explanation = res.explanation;
 				c.status = "loaded"
+				c.last_updated = c.text
 			}
 		}
 	}
@@ -85,8 +89,20 @@
     </button>
     <div>
 		<div class="criterion_header">
-			<input type="text" bind:value="{criterion.text}" />
-			<p>{`status=${criterion.status}`}</p>
+			<input type="text" bind:value="{criterion.text}" oninput={()=>{
+
+				if (!criterion.last_updated){
+					// We haven't even loaded the criterion yet so we let it remain as it was presumably 'unloaded'
+					return
+				}
+				if (criterion.text != criterion.last_updated){
+					criterion.status = 'old'
+				}
+				else{
+					criterion.status = 'loaded'
+				}
+			}} />
+			<Status bind:status={criterion.status}></Status>
 		</div>
         
         <h3> {
@@ -119,7 +135,15 @@
         flex-direction: row;
 	}
 	input {
+
 		padding: 0;
 		margin: 0;
+	}
+
+	button {
+		background-color: var(--bg-inner);
+		border: none;
+		margin: 3pt;
+		color: var(--text);
 	}
 </style>

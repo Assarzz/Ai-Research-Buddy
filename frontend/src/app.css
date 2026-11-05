@@ -4,7 +4,8 @@
   --bg-inner: #567e4b;
 	--text:        #C9F2C7;  /* text on the background */
 	--border:      #629460;
-	--error:       red;
+	--error:       rgb(189, 61, 61);
+	--bg-text-input: #d8ffce;
 }
 
 html, body, #app {
@@ -16,4 +17,5 @@ body {
 	box-sizing: border-box;
 	background-color: var(--bg);
 	color: var(--text);
+
 }
