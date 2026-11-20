@@ -19,6 +19,20 @@ def init_database():
         );
     """)
 
+
+
+    c.execute("""
+              CREATE TABLE IF NOT EXISTS user_criteria 
+              (id INTEGER PRIMARY KEY AUTOINCREMENT,
+              user_id INTEGER NOT NULL,
+              criteria TEXT NOT NULL,
+              FOREIGN KEY (user_id) REFERENCES users(id)
+                );
+    """)
+
+
+
+
     # Create a chat_id with chat_id = str(uuid.uuid4())
     c.execute("""
     CREATE TABLE IF NOT EXISTS chats (
