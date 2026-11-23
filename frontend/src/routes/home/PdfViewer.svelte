@@ -2,29 +2,35 @@
     let { selectedPdf = $bindable() } = $props();
     let pdfList = $state<FileList | undefined>(undefined);
 
+    // ensures selectedPdf variable is always updated when user picks a different file
     $effect(() => {
         selectedPdf = pdfList?.item(0);
     });
 
     let objectUrl = $state("");
 
+    // when selectedPdf changes, a new url for the file to display is created.
     $effect(() => {
-        if (selectedPdf) {
-            // Revoke the old URL before creating a new one
-            if (objectUrl) URL.revokeObjectURL(objectUrl);
-
-            objectUrl = URL.createObjectURL(selectedPdf);
-        } else {
-            if (objectUrl) URL.revokeObjectURL(objectUrl);
+        if (!selectedPdf) {
             objectUrl = "";
+            return;
         }
+        const url = URL.createObjectURL(selectedPdf);
+        objectUrl = url;
+
+        // cleanup runs immediately before the next effect
+        return () => {
+            URL.revokeObjectURL(url);
+        };
     });
 </script>
 
 <label>
     <input type="file" bind:files={pdfList} accept="application/pdf" />
-    {#if selectedPdf}
-        <embed src={objectUrl} />
+    {#if objectUrl}
+        {#key objectUrl}
+            <embed src={objectUrl} type="application/pdf" />
+        {/key}
     {:else}
         <svg
             xmlns="http://www.w3.org/2000/svg"
