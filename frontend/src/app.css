@@ -1,17 +1,19 @@
 /* This file is imported in `main.js` and available in all .svelte files. We can define our color theme here  */
 :root {
-	--bg:          #243119; 
-  --bg-inner: #567e4b;
-	--text:        #C9F2C7;  /* text on the background */
-	--border:      #629460;
-	--error:       rgb(189, 61, 61);
-	--bg-text-input: #d8ffce;
+	--bg:#191919;
+	--bg-inner:#1F1F1F;
+	--text:#ffffff;
+	--border:#404040;
+	--error:#a72e2e;
+	--bg-text-input:#d8ffce;
 }
 
 html, body, #app {
 	height: 100%;
 }
-
+* {
+	font-family:"sans-serif";
+}
 body {
 	margin: 0;
 	box-sizing: border-box;

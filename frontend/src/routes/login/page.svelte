@@ -85,7 +85,7 @@
     }
 
     .wrong {
-        color: red;
+        color: var(--error);
     }
 
     .move-good {
