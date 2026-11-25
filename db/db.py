@@ -1,7 +1,7 @@
 import sqlite3
 import uuid
 import bcrypt
-import db.validate
+import validate
 
 def init_database():
     # Creates a connection to the db, will create a db if it does not already exist
@@ -49,12 +49,12 @@ def init_database():
 
 def add_user(user_name: str, email: str, password: str) -> bool:
     # Validate password and emil format
-    if not validate_email(email):
+    if not validate.validate_email(email):
         raise ValueError("Invalid email address")
 
-    if not validate_password(password):
+    if not validate.validate_password(password):
         raise ValueError(
-            "Password must be at least 8 characters long and contain "
+            "Password must be at least 8 characters long and contain at least one of each: "
             "uppercase, lowercase, and special characters."
         )
     
