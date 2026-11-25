@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template_string, redirect, url_for, session, Response, jsonify, stream_with_context
 import db.verify
 import db.db
+from db.criteria import add_criteria, fetch_criteria
 from ai.pdf_evaluate import evaluate
 import json
 import pymupdf
@@ -87,6 +88,20 @@ def api_signup():
 
     return jsonify({
         "success": False
+    })
+
+
+
+@app.route('/api/add_criteria', methods=["POST"])
+def save_criterion():
+    if session.get("user") is None:
+        return {"error": "not logged in"}
+
+    print(session.get("userID"))
+     
+
+    return jsonify({
+        "success": True
     })
 
 
