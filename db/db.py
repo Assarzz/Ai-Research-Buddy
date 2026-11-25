@@ -1,6 +1,6 @@
 import sqlite3
 import uuid
-
+import bcrypt
 
 def init_database():
     # Creates a connection to the db, will create a db if it does not already exist
@@ -53,11 +53,17 @@ def add_user(user_name: str, email: str, password: str) -> bool:
     conn = sqlite3.connect("database.db")
     c = conn.cursor()
 
+    # Creates salt + hash for password
+    password_hash = bcrypt.hashpw(
+        password.encode("utf-8"),
+        bcrypt.gensalt()
+    ).decode("utf-8")
+
     try:
         c.execute("""
             INSERT INTO users (user_name, email, password)
             VALUES (?, ?, ?)
-            """, (user_name, email, password)
+            """, (user_name, email, password_hash)
                   )
     except Exception as e:
         print("Error:", e)

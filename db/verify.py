@@ -1,10 +1,5 @@
 import sqlite3
-
-"""def verifyAccount(name, password):
-    print(name + " : " + password)
-    print(name==password)
-    return name == password
-    """
+import bcrypt
 
 def verifyAccount(name,  password):
     conn = sqlite3.connect("database.db")
@@ -21,4 +16,9 @@ def verifyAccount(name,  password):
     if result is None:
         return False
 
-    return result[0] == password
+    stored_hash = result[0]
+
+    return bcrypt.checkpw(
+        password.encode("utf-8"),
+        stored_hash.encode("utf-8")
+    )
