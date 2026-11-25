@@ -46,18 +46,15 @@ def init_database():
     # Close connection
     conn.close()
 
-# Another function is needed to hash the password
-
-
 def add_user(user_name: str, email: str, password: str) -> bool:
-    conn = sqlite3.connect("database.db")
-    c = conn.cursor()
-
     # Creates salt + hash for password
     password_hash = bcrypt.hashpw(
         password.encode("utf-8"),
         bcrypt.gensalt()
     ).decode("utf-8")
+    
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
 
     try:
         c.execute("""
