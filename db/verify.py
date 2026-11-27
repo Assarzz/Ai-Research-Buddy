@@ -29,8 +29,10 @@ def verifyAccount(name,  password):
     conn.close()
 
     if stored_password is None:
-        return False
-    account_dict["account_validity"] = stored_password[0] == password
+        account_dict["account_validity"] = False
+    else:
+        account_dict["account_validity"] = stored_password[0] == password
+    
     account_dict["user_ID"] = user_ID
 
     return account_dict
