@@ -67,13 +67,13 @@
 		}
 	}
 
+	
+	let privateCriteria = $state<string[]>([]);
+
 	async function loadCriteria() {
     	const response = await fetch("/api/get_criteria");
     	const data = await response.json();
-
-    	for (const text of data) {
-    		criteria.push(newCriterion(text));
-		}
+		privateCriteria = data;
 	}
 
 	let showPopup = $state(false);
@@ -114,12 +114,24 @@
         </button>
 		
         <button onclick={() => showPopup = false}>
-            Cancel
+            Close
         </button>
 
 		<button onclick={loadCriteria}>
-			Load Criteria
+			Load Personal Criteria From Database
 		</button>
+		
+		<h3>My Criteria</h3>
+
+        {#each privateCriteria as text}
+            <button onclick={() => criteria.push(newCriterion(text))}>
+			{text}
+			</button>
+		{/each}
+
+		<h3>Empirical Standards</h3>
+
+
 
     </div>
 {/if}
