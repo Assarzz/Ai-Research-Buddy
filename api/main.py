@@ -58,10 +58,15 @@ def api_login():
     password = data.get("password", "")
 
     user = None
-    if db.verify.verifyAccount(username, password):
+    user_ID = None
+
+    account = db.verify.verifyAccount(username, password)
+    if account["account_validity"]:
         user = username
+        user_ID = account["user_ID"]
 
     if user:
+        session["user_ID"] = user_ID
         session["user"] = username
         return jsonify({"success": True})
 
@@ -98,7 +103,10 @@ def save_criterion():
         return {"error": "not logged in"}
 
     print(session.get("userID"))
-     
+    
+    #Just nu är vi här. Jag ska skriva om stora delar av programmet för att få tag i userID. Kolla DC
+    #add_criteria(userid=,criteria=)
+    
 
     return jsonify({
         "success": True
