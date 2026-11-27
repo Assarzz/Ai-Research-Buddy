@@ -67,7 +67,65 @@
 		}
 	}
 
+	async function loadCriteria() {
+    	const response = await fetch("/api/get_criteria");
+    	const data = await response.json();
+
+    	for (const text of data) {
+    		criteria.push(newCriterion(text));
+		}
+	}
+
+	let showPopup = $state(false);
+    let customCriterion = $state("");
+	
+	async function saveCriterion() {
+    const response = await fetch("/api/add_criteria", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            criteria: customCriterion
+        })
+    });
+    console.log(await response.text());
+
+    showPopup = false;
+    customCriterion = "";
+	}
+
 </script>
+
+<button onclick={() => showPopup = true}>
+    Create Custom Criteria
+</button>
+
+{#if showPopup}
+    <div class="popup">
+        <h3>Create Custom Criterion</h3>
+
+        <input
+            bind:value={customCriterion}
+            placeholder="Enter criterion"
+        >
+        <button onclick={saveCriterion}>
+            Save
+        </button>
+		
+        <button onclick={() => showPopup = false}>
+            Cancel
+        </button>
+
+		<button onclick={loadCriteria}>
+			Load Criteria
+		</button>
+
+    </div>
+{/if}
+
+
+
 
 
 <h1>Criteria: </h1>
