@@ -85,8 +85,14 @@ def api_signup():
     print("Testing Testing")
 
     session['user'] = username
+    db.db.add_user(username, username, password)
 
-    if db.db.add_user(username, username, password):
+    account = db.verify.verifyAccount(username, password)
+    if account["account_validity"]:
+        
+        user_ID = account["user_ID"]
+        session['user_ID'] = user_ID
+        
         return jsonify({
             "success": True
         })
