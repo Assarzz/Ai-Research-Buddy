@@ -95,6 +95,15 @@ def api_signup():
         "success": False
     })
 
+@app.route('/api/get_criteria')
+def get_criteria():
+    criterion = fetch_criteria(session.get("user_ID"))    
+    
+    print(criterion)
+
+    return jsonify(criterion)
+
+
 
 
 @app.route('/api/add_criteria', methods=["POST"])
