@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template_string, redirect, url_for, session, Response, jsonify, stream_with_context
 import db.verify
 import db.db
-from db.criteria import add_criteria, fetch_criteria
+from db.criteria import add_criteria, fetch_criteria, fetch_empirical_standards
 from ai.pdf_evaluate import evaluate
 import json
 import pymupdf
@@ -101,6 +101,11 @@ def get_criteria():
 
     return jsonify(criterion)
 
+
+@app.route('/api/get_empirical_standards')
+def get_empirical_standard():
+    criterion = fetch_empirical_standards() 
+    return jsonify(criterion)
 
 
 

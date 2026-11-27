@@ -68,6 +68,10 @@
 	}
 
 	
+
+
+
+
 	let privateCriteria = $state<string[]>([]);
 
 	async function loadCriteria() {
@@ -80,19 +84,23 @@
     let customCriterion = $state("");
 	
 	async function saveCriterion() {
-    const response = await fetch("/api/add_criteria", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
+    const response = await fetch("/api/add_criteria", {method: "POST",
+        headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
             criteria: customCriterion
         })
     });
-    console.log(await response.text());
-
     showPopup = false;
     customCriterion = "";
+	}
+
+	let empiricalCriterion = $state("");
+	
+	async function loadEmpiricalStandards(){
+		const response = await fetch("/api/get_empirical_standards")
+		const data = await response.json();
+		empiricalCriterion = data;
+
 	}
 
 </script>
@@ -100,6 +108,7 @@
 <button onclick={() => showPopup = true}>
     Create Custom Criteria
 </button>
+
 
 {#if showPopup}
     <div class="popup">
@@ -123,6 +132,10 @@
 		
 		<h3>My Criteria</h3>
 
+		<button onclick={loadEmpiricalStandards}>
+			Load loadEmpiricalStandards
+		</button>
+
         {#each privateCriteria as text}
             <button onclick={() => criteria.push(newCriterion(text))}>
 			{text}
@@ -130,8 +143,11 @@
 		{/each}
 
 		<h3>Empirical Standards</h3>
-
-
+		{#each empiricalCriterion as text}
+			<button onclick={() => criteria.push(newCriterion(text))}>
+			{text}
+			</button>
+		{/each}
 
     </div>
 {/if}

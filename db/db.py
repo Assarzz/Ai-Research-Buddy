@@ -1,6 +1,6 @@
 import sqlite3
 import uuid
-import empirical_standards
+from db import empirical_standards
 
 def init_database():
     # Creates a connection to the db, will create a db if it does not already exist
