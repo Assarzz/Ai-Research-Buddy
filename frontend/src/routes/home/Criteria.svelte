@@ -132,9 +132,6 @@
 		
 		<h3>My Criteria</h3>
 
-		<button onclick={loadEmpiricalStandards}>
-			Load loadEmpiricalStandards
-		</button>
 
         {#each privateCriteria as text}
             <button onclick={() => criteria.push(newCriterion(text))}>
@@ -143,6 +140,11 @@
 		{/each}
 
 		<h3>Empirical Standards</h3>
+		<button onclick={loadEmpiricalStandards}>
+			Load loadEmpiricalStandards
+		</button>
+
+
 		{#each empiricalCriterion as text}
 			<button onclick={() => criteria.push(newCriterion(text))}>
 			{text}
