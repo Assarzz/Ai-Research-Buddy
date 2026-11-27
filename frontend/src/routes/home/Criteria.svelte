@@ -90,7 +90,6 @@
             criteria: customCriterion
         })
     });
-    showPopup = false;
     customCriterion = "";
 	}
 
