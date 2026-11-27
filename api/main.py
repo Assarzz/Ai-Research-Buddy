@@ -102,12 +102,8 @@ def save_criterion():
     if session.get("user") is None:
         return {"error": "not logged in"}
 
-    print(session.get("userID"))
-    
-    #Just nu är vi här. Jag ska skriva om stora delar av programmet för att få tag i userID. Kolla DC
-    #add_criteria(userid=,criteria=)
-    
-
+    criteria = request.get_json()["criteria"]
+    add_criteria(session.get("user_ID"),criteria)
     return jsonify({
         "success": True
     })
