@@ -1,6 +1,6 @@
 import sqlite3
 import uuid
-
+import empirical_standards
 
 def init_database():
     # Creates a connection to the db, will create a db if it does not already exist
@@ -31,6 +31,12 @@ def init_database():
     """)
 
 
+    c.execute("""
+    CREATE TABLE IF NOT EXISTS empirical_standards (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        standard TEXT NOT NULL
+        );
+    """)
 
 
     # Create a chat_id with chat_id = str(uuid.uuid4())
@@ -53,6 +59,9 @@ def init_database():
         FOREIGN KEY (chat_id) REFERENCES chats(chat_id)
         );
     """)
+
+    #creates empirical standards in database
+    empirical_standards.init_empirical_standards()
 
     # Commit commands {.execute()} to db
     conn.commit()
