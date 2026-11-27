@@ -1,7 +1,25 @@
 import sqlite3
 
 
+def fetch_empirical_standards():
+    
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
 
+    c.execute("""
+    SELECT standard FROM empirical_standards
+    """ )
+    
+    result = c.fetchall()
+    conn.close()
+    
+    j = 0
+    for i in result:
+        result[j] = i[0]
+        j = j + 1
+    print(result)
+
+    return result
 
 def fetch_criteria(user_ID):
     conn = sqlite3.connect("database.db")
@@ -76,3 +94,5 @@ if __name__ == "__main__":
     print_criterion()
     print("---------Users---------------")
     print_users()
+    print("---------Standards List--------")
+    print(fetch_empirical_standards())
