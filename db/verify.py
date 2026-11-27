@@ -33,7 +33,7 @@ def verifyAccount(name,  password):
     else:
         account_dict["account_validity"] = stored_password[0] == password
     
-    account_dict["user_ID"] = user_ID
+    account_dict["user_ID"] = user_ID[0]
 
     return account_dict
 
